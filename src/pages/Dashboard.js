@@ -6,9 +6,13 @@ import { getPokemons } from '../redux/actions/pokemonsAction';
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Search as SearchIcon } from 'react-feather';
+import Services from '../services/services';
+
+const pokemonsService = new Services();
 
 const Dashboard = (props) => {
 	const [name, setName] = useState(0);
+	const [pokemonsF, setPokemonsF] = useState([]);
 
 	useEffect(() => {
 		fetchData();
@@ -19,8 +23,20 @@ const Dashboard = (props) => {
 		await props.getPokemons();
 	};
 
-	const search = () => {
+	const search = async () => {
 		console.log('', name);
+		console.log(props.pokemons.results.filter((item) => item.name.includes(name)));
+
+		const promises = [];
+		props.pokemons.results
+			.filter((item) => item.name.includes(name))
+			.forEach((item) => {
+				console.log(item.url);
+				promises.push(pokemonsService.getPokemon(item.url.split('/')[6]));
+				console.log(item.url.split('/')[6]);
+			});
+
+		setPokemonsF(await Promise.all(promises));
 	};
 
 	const handleInputChange = (event) => {
@@ -67,7 +83,7 @@ const Dashboard = (props) => {
 					</Grid>
 					<Grid container spacing={3}>
 						<Grid item lg={8} md={12} xl={9} xs={12}>
-							<Pokemons pokemons={props.pokemons ? props.pokemons : []} />
+							<Pokemons pokemons={pokemonsF} />
 						</Grid>
 					</Grid>
 				</Container>

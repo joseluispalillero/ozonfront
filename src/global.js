@@ -1,6 +1,6 @@
 let Global = {
 	env: process.env.REACT_APP_ENV,
-	url: process.env.REACT_APP_URL,
+	url: process.env.REACT_APP_POKEMON_BASE_URL,
 	mobileWidth: 1024,
 };
 

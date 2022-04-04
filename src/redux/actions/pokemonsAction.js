@@ -10,6 +10,7 @@ export const getPokemons = () => async (dispatch) => {
 	await pokemonsService
 		.getAllPokemons()
 		.then((response) => {
+			console.log('----------', response);
 			dispatch({ type: POKEMONS_ALL, payload: response.data });
 		})
 		.catch((err) => {
